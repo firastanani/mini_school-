@@ -1,0 +1,44 @@
+scalar Upload
+scalar util
+
+type Teacher {
+  _id: ID!
+  name: String!
+  email: String!
+  imageUrl: String
+  age: Int
+  phoneNumber: String!
+}
+
+input TeacherInputDataForSignUp {
+  email: String!
+  name: String!
+  password: String!
+  age: Int
+  image: Upload
+  phoneNumber: String!
+}
+
+input TeacherInputDataForUpdate {
+  name: String
+  age: Int
+  image: Upload
+  phoneNumber: String!
+}
+
+input inputLogin {
+  email: String!
+  password: String!
+}
+type AuthData {
+  token: String!
+  user: User
+}
+
+type Query{
+  hello:String
+}
+
+type Mutation {
+  signUpTeacher(data: TeacherInputDataForSignUp!): Teacher!
+}

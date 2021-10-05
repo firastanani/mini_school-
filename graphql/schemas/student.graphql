@@ -1,0 +1,42 @@
+scalar Upload
+scalar util
+union User = Teacher | Student
+type Student {
+  _id: ID!
+  name: String!
+  email: String!
+  imageUrl: String
+  age: Int
+  phoneNumber: String!
+}
+
+input StudentInputDataForSignUp{
+  email: String!
+  name: String!
+  password: String!
+  age: Int
+  image: Upload
+  phoneNumber: String!
+}
+
+input StudentInputDataForUpdate {
+  name: String
+  age: Int
+  image: Upload
+  phoneNumber: String
+}
+
+
+input inputLogin {
+  email: String!
+  password: String!
+}
+
+type AuthData {
+  token: String!
+  user: User
+}
+
+type Mutation {
+  signUpStudent(data: StudentInputDataForSignUp!): Student!
+}
