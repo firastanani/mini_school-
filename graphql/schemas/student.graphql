@@ -1,6 +1,6 @@
 scalar Upload
 scalar util
-union User = Teacher | Student
+
 type Student {
   _id: ID!
   name: String!
@@ -10,7 +10,7 @@ type Student {
   phoneNumber: String!
 }
 
-input StudentInputDataForSignUp{
+input StudentInputDataForSignUp {
   email: String!
   name: String!
   password: String!
@@ -24,17 +24,6 @@ input StudentInputDataForUpdate {
   age: Int
   image: Upload
   phoneNumber: String
-}
-
-
-input inputLogin {
-  email: String!
-  password: String!
-}
-
-type AuthData {
-  token: String!
-  user: User
 }
 
 type Mutation {

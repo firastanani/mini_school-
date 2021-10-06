@@ -81,9 +81,9 @@ const teacherSchema = mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-        type : Number,
-        required: true,
-        maxlength: 10,
+      type: Number,
+      required: true,
+      maxlength: 10,
     }
   },
   { timestamps: true, toObject: { virtuals: true } }
@@ -92,7 +92,7 @@ const teacherSchema = mongoose.Schema(
 
 teacherSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id , type : serverConstant.TEACHER }, config.get("jwtPrivateKey"));
+  const token = jwt.sign({ _id: user._id, type: serverConstant.TEACHER }, config.get("jwtPrivateKey"));
   user.tokens.push(token);
   await user.save();
 
@@ -110,10 +110,7 @@ teacherSchema.virtual("requests", {
 teacherSchema.statics.findByCredentials = async (email, password) => {
   const teacher = await Teacher.findOne({ email: email });
   if (!teacher) {
-    const errors = new Error("invalid input");
-    errors.data = "email not found";
-    errors.code = 400;
-    throw errors;
+    return null;
   }
   const isMatch = await bcrypt.compare(password, teacher.password);
   if (!isMatch) {
@@ -160,7 +157,7 @@ teacherSchema.statics.validateLogin = (userInput) => {
 teacherSchema.statics.validateTeacher = (user) => {
   const schema = {
     image: Joi.any(),
-    phoneNumber:Joi.any(),
+    phoneNumber: Joi.any(),
     name: Joi.string()
       .min(5)
       .max(50)

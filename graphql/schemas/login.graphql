@@ -1,0 +1,15 @@
+union User = Teacher | Student
+
+type AuthData {
+  token: String!
+  user: User!
+}
+
+input inputLogin {
+  email: String!
+  password: String!
+}
+
+type Query {
+  login(data: inputLogin!): AuthData!
+}

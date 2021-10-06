@@ -82,9 +82,9 @@ const studentSchema = mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-        type : Number,
-        required: true,
-        maxlength: 10,
+      type: Number,
+      required: true,
+      maxlength: 10,
     }
   },
   { timestamps: true, toObject: { virtuals: true } }
@@ -93,7 +93,7 @@ const studentSchema = mongoose.Schema(
 
 studentSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id , type : serverConstant.STUDENT }, config.get("jwtPrivateKey"));
+  const token = jwt.sign({ _id: user._id, type: serverConstant.STUDENT }, config.get("jwtPrivateKey"));
   user.tokens.push(token);
   await user.save();
 
@@ -111,10 +111,7 @@ studentSchema.virtual("requests", {
 studentSchema.statics.findByCredentials = async (email, password) => {
   const student = await Student.findOne({ email: email });
   if (!student) {
-    const errors = new Error("invalid input");
-    errors.data = "email not found";
-    errors.code = 400;
-    throw errors;
+    return null;
   }
   const isMatch = await bcrypt.compare(password, student.password);
   if (!isMatch) {
@@ -132,29 +129,6 @@ studentSchema.statics.findByCredentials = async (email, password) => {
   }
 
   return student;
-};
-
-//validate login
-studentSchema.statics.validateLogin = (userInput) => {
-  const schema = {
-    email: Joi.string()
-      .min(5)
-      .max(255)
-      .required()
-      .email({ tlds: { allow: ["com", "net"] } })
-      .regex(/^\w+[\+\.\w-]*@([\w-]+.)*\w+[\w-]*.([a-z]{2,4}|d+)$/i)
-      .message("please check your email"),
-    password: Joi.string().min(5).max(50).required(),
-  };
-
-  const { error } = Joi.object(schema).validate(userInput);
-
-  if (error) {
-    const errors = new Error("invalid input");
-    errors.data = error.details[0].message;
-    errors.code = 400;
-    throw errors;
-  }
 };
 
 //validate create user
