@@ -1,5 +1,5 @@
 union User = Teacher | Student
-
+scalar data
 type AuthData {
   token: String!
   user: User!
