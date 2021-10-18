@@ -1,4 +1,5 @@
 const { Teacher } = require('../models/teacher');
+const { Service } = require('../models/Service');
 const { processUpload } = require("../util/forUploadFile/fileUplad");
 
 module.exports.teacherSignUp = async (teacherData) => {
@@ -34,3 +35,40 @@ module.exports.teacherSignUp = async (teacherData) => {
   //await sendEmail(teachertData.email, createUrlConfirmEmail(Teacher._id));
   return teacher;
 };
+
+module.exports.getService = async (serviceId) => {
+  const service = await Service.findById(serviceId);
+  if (!service) {
+    const errors = new Error("Service to delete not found!!!");
+    errors.code = 404;
+    throw errors;
+  }
+
+  return service;
+}
+
+module.exports.addService = async (addServiceData, teacher) => {
+
+  addServiceData.author = teacher._id
+
+  let service = new Service(addServiceData);
+  service = await service.save();
+
+  return service;
+};
+
+module.exports.deleteService = async (serviceId, teacher) => {
+
+  let service = await this.getService(serviceId);
+  if (!(service.author).equals(teacher._id)) {
+    const errors = new Error("can't delete others services");
+    errors.code = 401;
+    throw errors;
+  }
+
+  service = await service.remove();
+
+  return service;
+};
+
+

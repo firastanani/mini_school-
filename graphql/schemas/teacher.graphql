@@ -1,3 +1,5 @@
+scalar Date
+
 type Teacher {
   _id: ID!
   name: String!
@@ -5,6 +7,16 @@ type Teacher {
   imageUrl: String
   age: Int
   phoneNumber: String!
+}
+
+type Service {
+  _id: ID!
+  subject_en: String
+  subject_ar: String
+  description_en: String
+  description_ar: String
+  costPerHour: Int!
+  createdAt: Date!
 }
 
 input TeacherInputDataForSignUp {
@@ -23,9 +35,12 @@ input TeacherInputDataForUpdate {
   phoneNumber: String!
 }
 
-input inputLogin {
-  email: String!
-  password: String!
+input AddServiceData {
+  subject_en: String
+  subject_ar: String
+  description_en: String
+  description_ar: String
+  costPerHour: Int!
 }
 
 type Query {
@@ -34,4 +49,6 @@ type Query {
 
 type Mutation {
   signUpTeacher(data: TeacherInputDataForSignUp!): Teacher!
+  addService(data: AddServiceData!): Service!
+  deleteService(serviceId: ID!): Service!
 }

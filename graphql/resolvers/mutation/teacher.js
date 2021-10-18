@@ -1,6 +1,9 @@
 const { Teacher } = require("../../../models/teacher");
 const { createResolver } = require("apollo-resolvers");
-const {teacherSignUp} = require("../../../services/teacherServices");
+const { teacherSignUp, addService, deleteService } = require("../../../services/teacherServices");
+const { validateAddServiceInput } = require('../../../validation/serviceValidation')
+const { validateId } = require('../../../validation/idValidation');
+const teacherCheckAuth = require('../../../middleware/checkAuth');
 
 module.exports = {
   Mutation: {
@@ -10,6 +13,18 @@ module.exports = {
       const teacher = await teacherSignUp(data)
       return teacher;
     }),
-    
+    addService: teacherCheckAuth.createResolver(async function (parent, { data }, ctx, info) {
+      console.log(data);
+      validateAddServiceInput(data);
+
+      const service = await addService(data, ctx.req.user);
+      return service;
+    }),
+    deleteService: teacherCheckAuth.createResolver(async function (parent, { serviceId }, ctx, info) {
+      validateId(serviceId);
+
+      const service = await deleteService(serviceId, ctx.req.user);
+      return service;
+    }),
   },
 };
