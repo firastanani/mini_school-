@@ -45,6 +45,7 @@ input AddServiceData {
 
 type Query {
   hello: String
+  getMyServices: [Service!]!
 }
 
 type Mutation {

@@ -47,6 +47,13 @@ module.exports.getService = async (serviceId) => {
   return service;
 }
 
+module.exports.getAllServicesForTeacher = async (teacherId) => {
+  const services = await Service.find({ author: teacherId });
+
+  console.log(services);
+  return services;
+}
+
 module.exports.addService = async (addServiceData, teacher) => {
 
   addServiceData.author = teacher._id
